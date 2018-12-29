@@ -84,9 +84,12 @@ install_raspi: deps download build_raspi sudo_install clean verify
 # Install system wide.
 sudo_install:
 	cd $(TMP_DIR)opencv/opencv-$(OPENCV_VERSION)/build
-	sudo $(MAKE) install
-	sudo ldconfig
-	cd -
+	export PKG_CONFIG_PATH="/usr/local/lib64/pkgconfig"
+        @echo export PKG_CONFIG_PATH="/usr/local/lib64/pkgconfig" >> ~/.bashrc
+        @echo /usr/local/lib64 >> /etc/ld.so.conf
+        sudo $(MAKE) install
+        sudo ldconfig
+        @cd - || true	
 
 # Build a minimal Go app to confirm gocv works.
 verify:
